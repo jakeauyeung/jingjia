@@ -1,0 +1,16 @@
+**** 打包
+- electron packager
+  - electron-packager ./app  <name>  --platform=win32 --arch=x64 --overwrite  --ignore=dev-settings --prune
+
+| 参数      | 说明                                                                                                |
+| prune     | 打包之前运行npm prune --production命令，devDependencies中的包都不会打包进去，很大程度减小包的大小。 |
+| asar      | 自动运行 asar pack ，也可最后手动运行，更加可控。                                                   |
+| ignore    | 此参数指定的文件，将不会随带打包进去。                                                              |
+| overwrite | 覆盖模式打包                                                                                        |
+
+
+**** 压缩
+- UPX
+  - 最后生成的exe 文件达到80M 以上，可以用 UPX 工具压缩至30M 左右，便于分发。
+
+
