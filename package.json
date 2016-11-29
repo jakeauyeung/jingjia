@@ -4,13 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"electron .\"",
+    "packageDarwin": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webbpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
+    "packageWin": "electron-packager . 'jingjia' --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
+    "packageLinux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
+    "prepackage": "rm -rf build && rm -rf dist",
+    "package": "npm run packageDarwin && npm run packageWin && npm run packageLinux"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jakeauyeung/jingjia.git"
   },
-  "author": "",
+  "author": "jakeauyeung",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jakeauyeung/jingjia/issues"

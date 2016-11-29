@@ -2,7 +2,7 @@ con
 node_modules
 doc
 dev
-DS_Store
+data.db
 *.sh
 *.idea*
 *.zip
