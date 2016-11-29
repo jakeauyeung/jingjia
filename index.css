@@ -1,0 +1,118 @@
+body{
+    font-size: 14px;
+／**    background-image: url('icons/bg.jpg');
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 15rem 20rem;
+**／
+    background-color: rgb(234,239,232)
+    
+}
+.custom-menu{
+    background: #000;
+}
+.custom-menu .pure-menu-link{
+    color: white;
+}
+.custom-menu .pure-menu-link:hover{
+    color: gray;
+}
+.custom-menu .pure-menu-link:focus{
+    color: gray;
+}
+.custom-menu .pure-menu-link i{
+    margin-right: 5px;
+}
+.fullscreen{
+    position:absolute;
+    right:10px;
+    top: 10px;
+}
+.fullscreen a{
+    color: white;
+}
+.pure-form-aligned .pure-control-group label{
+    width:5rem;
+    font-size: 16px;
+}
+#donePrice{
+    width: 8rem;
+    font-size: 1.1rem;
+    font-weight:bold;
+}
+.pure-form-center{
+    width: 18rem;
+    margin: .5rem auto;
+}
+.pure-form-aligned .pure-controls a{
+    margin-right: .5rem;
+}
+.pure-form-aligned .pure-control-group {
+    margin: 1rem 0;
+}
+.search-box{
+    margin: 10rem auto;
+    width: 20rem;
+}
+.search-box a{
+    margin-left: 1rem;
+}
+.empty-box{
+    font-size: 18px;
+    padding-top:10rem;
+    width: 15rem;
+    margin: auto;
+}
+.empty-box .fa-4{
+    vertical-align: sub;
+    margin-right:1rem;
+    font-size: 2em
+}
+#currentDate{
+    color: gray;
+    position:fixed;
+    left: 5px;
+    bottom: 5px;
+}
+/****Help*****/
+.help-body{
+    Background: #8aba87;
+}
+.help-closed{
+    position:fixed;
+    bottom: 20px;
+    left: 45%;
+    color:white;
+}
+.help-closed a {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid #fff;
+    text-decoration:none;
+    color:white;
+    cursor:pointer;
+}
+.help ul li {
+    color: white;
+}
+.kj{
+    
+}
+.help{
+    margin: 2rem;
+}
+.pure-table-custom{
+    width: 100%;
+}
+.pure-table-custom td{
+    border: 1px solid #fff;
+    color: white;
+}
+.pure-table-custom th{
+    
+    border:1px solid #fff;
+    color: gray;
+}
+.pure-table-custom{
+    color: white;
+}
