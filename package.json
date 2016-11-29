@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"electron .\"",
-    "packageDarwin": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webbpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
-    "packageWin": "electron-packager . 'jingjia' --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
-    "packageLinux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --asar --app-version=1.0.0 --ignore=\"(css|dist|fonts|src|docs|.gitignore|LICENSE|README.org|jingjia.icns|jingjia.ico|webpack.config.js|gulpfile.js|node_modules/(?!sudo-prompt))\"",
+    "packageDarwin": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "packageWin": "electron-packager . 'jingjia' --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "packageLinux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
     "prepackage": "rm -rf build && rm -rf dist",
     "package": "npm run packageDarwin && npm run packageWin && npm run packageLinux"
   },

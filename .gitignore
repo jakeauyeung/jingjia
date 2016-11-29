@@ -3,6 +3,7 @@ node_modules
 doc
 dev
 data.db
+dist
 *.sh
 *.idea*
 *.zip

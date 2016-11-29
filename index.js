@@ -97,6 +97,10 @@ app.on('will-quit', function () {
     globalShortcut.unregisterAll();
 });
 
+app.on('browser-window-blur', function() {
+    globalShortcut.unregisterAll(); 
+});
+
 app.on('ready', function() {
     createWindow();
 });
