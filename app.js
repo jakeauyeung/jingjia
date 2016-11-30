@@ -387,12 +387,14 @@ initFindData();
 // 注册按键事件
 
 function nextRight() {
+	
+    nextCellForm(currentIndex + 1);
     currentIndex++;
-    nextCellForm(currentIndex);
 }
 function nextLeft() {
+	
+    preCellForm(currentIndex - 1);
     currentIndex--;
-    preCellForm(currentIndex);
 }
 
 function nextUp() {
