@@ -23,7 +23,7 @@ ipc.on('open-directory-dialog', function(event) {
 ipc.on('open-file-dialog', function(event) {
     dialog.showOpenDialog({
 	filters:[
-	    {name: 'Excel', extensions: ['xlsx']}
+	    {name: 'Excel', extensions: ['xlsx', 'xls']}
 	],
 	properties: ['openFile']
     },function(files) {
@@ -83,7 +83,7 @@ const createWindow = function() {
 
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-    mainWindow.webContents.openDevTools();
+   // mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
     });

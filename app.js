@@ -3,6 +3,7 @@ const shell = require('electron').shell;
 const ipc = require('electron').ipcRenderer;
 const os = require('os');
 const xlsx = require('node-xlsx');
+//const xls = require('xlsjs');
 const remote = require('electron').remote;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
