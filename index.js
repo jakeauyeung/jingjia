@@ -81,9 +81,34 @@ const createWindow = function() {
 
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-//    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
+    });
+    let webContents = mainWindow.webContents;
+    function registerShortcut() {
+	globalShortcut.register('Right', function() {
+	    webContents.send('right-page', true);
+	});
+	globalShortcut.register('Left', function() {
+	    webContents.send('left-page', true);
+	});
+	globalShortcut.register('Up', function() {
+	    webContents.send('up-page', true);
+	});
+	globalShortcut.register('Down', function() {
+	    webContents.send('down-page', true);
+	});
+	
+    }
+    mainWindow.on('blur', function() {
+	let win = BrowserWindow.getFocusedWindow();
+	if(win) return;
+	globalShortcut.unregisterAll();
+    });
+
+    mainWindow.on('focus', function() {
+	registerShortcut();
     });
 };
 
@@ -97,10 +122,6 @@ app.on('will-quit', function () {
     globalShortcut.unregisterAll();
 });
 
-app.on('browser-window-blur', function() {
-    globalShortcut.unregisterAll(); 
-});
-
 app.on('ready', function() {
     createWindow();
 });
@@ -110,3 +131,9 @@ app.on('activate', function() {
 	createWindow();
     }
 });
+
+app.on('browser-window-blur', function () {
+    globalShortcut.unregisterAll();
+});
+
+

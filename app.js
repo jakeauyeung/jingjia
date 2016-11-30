@@ -7,7 +7,7 @@ const remote = require('electron').remote;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
 const Datastore = require('nedb');
-const globalShortcut = require('electron').remote.globalShortcut;
+//const globalShortcut = require('electron').remote.globalShortcut;
 const fs = require('fs');
 
 // 处理监听，并释放
@@ -152,48 +152,48 @@ let html = `
   <form id-data="${data._id}" class="pure-form pure-form-aligned pure-form-center animated fadeIn">
     <fieldset>
         <div class="pure-control-group">
-          <label for="name">标的号</label>
-	  <label for="name">${data.biaodihao}</label>
+          <label for="name">标的号：</label>
+	  <span>${data.biaodihao}</span>
         </div>
 
         <div class="pure-control-group">
-          <label for="foo">种类</label>
-	  <label for="password">${data.zhonglei}</label>
+          <label for="foo">种类：</label>
+	  <span>${data.zhonglei}</span>
 	</div>
 
 	<div class="pure-control-group">
-          <label for="foo">规格</label>
-	  <label for="password">${data.guige}</label>
+          <label for="foo">规格：</label>
+	  <span>${data.guige}</span>
 	</div>
 	
 	 <div class="pure-control-group">
-          <label for="foo">等级</label>
-	  <label for="password">${data.dengji}</label>
+          <label for="foo">等级：</label>
+	  <span>${data.dengji}</span>
 	 </div>
 
 	  <div class="pure-control-group">
-          <label for="foo">颜色</label>
-	  <label for="password">${data.yanse}</label>
+          <label for="foo">颜色：</label>
+	  <span>${data.yanse}</span>
 	 </div>
 
 	 <div class="pure-control-group">
-          <label for="foo">数量</label>
-	  <label for="password">${data.shuliang}只</label>
+          <label for="foo">数量：</label>
+	  <span>${data.shuliang}只</span>
 	 </div>
 
 	  <div class="pure-control-group">
-          <label for="foo">起拍价</label>
-	  <label for="password">${data.qipaijia}元</label>
+          <label for="foo">起拍价：</label>
+	  <span>${data.qipaijia}元</span>
 	 </div>
         
 	  <div class="pure-control-group">
-            <label for="foo">成交价</label>
+            <label for="foo">成交价：</label>
 	  <input id="donePrice" type="text" default-data="${data.chengjiaojia}" value="${data.chengjiaojia}" placeholder="成交价"/>
 	 </div>
 
         <div class="pure-control-group">
-          <label for="password">成交号</label>
-	  <label for="password">${data.chengjiaohao}</label>
+          <label for="password">成交号：</label>
+	  <span id="dealNo">${data.chengjiaohao}</span>
         </div>        
 	  <div class="pure-controls">
 	    <a class="pure-button pure-button-primary" id="saveData">保存</a>
@@ -345,23 +345,20 @@ initFindData();
 
 // 注册按键事件
 
-globalShortcut.register('Right', function () {
+function nextRight() {
     currentIndex++;
-    console.log(currentIndex);
     nextCellForm(currentIndex);
-});
-
-globalShortcut.register('Left', function () {
+}
+function nextLeft() {
     currentIndex--;
     preCellForm(currentIndex);
-});
-
-globalShortcut.register('Up', function () {
+}
+function nextUp() {
     let donePrice = document.getElementById('donePrice');
     donePrice.value = parseInt(donePrice.value) +  KEYPRICE;
-});
+}
 
-globalShortcut.register('Down', function () {
+function nextDown() {
     let donePrice = document.getElementById('donePrice');
     if(parseInt(donePrice.value) < 100) {
 	donePrice.value = 0;
@@ -369,6 +366,30 @@ globalShortcut.register('Down', function () {
 	return false;
     }
     donePrice.value = parseInt(donePrice.value) - KEYPRICE;
+}
+
+ipc.on('right-page', function(event, message) {
+    if(message) {
+	nextRight();
+    } 
+});
+
+ipc.on('left-page', function(event, message) {
+    if(message) {
+	nextLeft();
+    } 
+});
+
+ipc.on('up-page', function(event, message) {
+    if(message) {
+	nextUp();
+    } 
+});
+
+ipc.on('down-page', function(event, message) {
+    if(message) {
+	nextDown();
+    } 
 });
 
 

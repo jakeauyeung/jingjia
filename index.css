@@ -35,6 +35,13 @@ body{
     width:5rem;
     font-size: 16px;
 }
+.pure-form-aligned .pure-control-group span{
+    vertical-align: middle;
+    font-size: 16px;
+}
+#dealNo{
+    
+}
 #donePrice{
     width: 8rem;
     font-size: 1.1rem;
@@ -52,7 +59,7 @@ body{
 }
 .search-box{
     margin: 10rem auto;
-    width: 20rem;
+    width: 25rem;
 }
 .search-box a{
     margin-left: 1rem;
@@ -75,9 +82,7 @@ body{
     bottom: 5px;
 }
 /****Help*****/
-.help-body{
-    Background: #8aba87;
-}
+
 .help-closed{
     position:fixed;
     bottom: 20px;
@@ -87,9 +92,9 @@ body{
 .help-closed a {
     display: inline-block;
     padding: 5px;
-    border: 1px solid #fff;
+    border: 1px solid gray;
+    color: gray;
     text-decoration:none;
-    color:white;
     cursor:pointer;
 }
 .help ul li {
@@ -104,15 +109,4 @@ body{
 .pure-table-custom{
     width: 100%;
 }
-.pure-table-custom td{
-    border: 1px solid #fff;
-    color: white;
-}
-.pure-table-custom th{
-    
-    border:1px solid #fff;
-    color: gray;
-}
-.pure-table-custom{
-    color: white;
-}
+
