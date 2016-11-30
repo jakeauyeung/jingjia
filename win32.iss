@@ -15,9 +15,9 @@ AppSupportURL=http://www.example.com/
 AppUpdatesURL=http://www.example.com/
 DefaultDirName={pf}\Ë®õõ¾º¼Û
 DisableProgramGroupPage=yes
-OutputDir=C:\Users\Administrator\Desktop\zhongan\jingjia\dist
+OutputDir=C:\Users\Administrator\Desktop\project\jingjia\dist
 OutputBaseFilename=jingjia-win32
-SetupIconFile=C:\Users\Administrator\Desktop\zhongan\jingjia\jingjia.ico
+SetupIconFile=C:\Users\Administrator\Desktop\project\jingjia\jingjia.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -29,8 +29,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Administrator\Desktop\zhongan\jingjia\dist\jingjia-win32-ia32\jingjia.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Administrator\Desktop\zhongan\jingjia\dist\jingjia-win32-ia32\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Administrator\Desktop\project\jingjia\dist\jingjia-win32-ia32\jingjia.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Administrator\Desktop\project\jingjia\dist\jingjia-win32-ia32\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
