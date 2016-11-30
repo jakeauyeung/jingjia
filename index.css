@@ -57,6 +57,20 @@ body{
 .pure-form-aligned .pure-control-group {
     margin: 1rem 0;
 }
+.settings-box{
+    margin: 10rem auto;
+    width: 24rem;
+}
+.settings-box span{
+    font-size: 12px!important;
+    color: gray;
+}
+.settings-box .setting-tips i{
+    margin-right: 5px;
+}
+.settings-box a{
+    margin-left: 1rem;
+}
 .search-box{
     margin: 10rem auto;
     width: 25rem;
@@ -98,7 +112,7 @@ body{
     cursor:pointer;
 }
 .help ul li {
-    color: white;
+
 }
 .kj{
     

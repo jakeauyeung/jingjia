@@ -13,8 +13,9 @@ const fs = require('fs');
 // 处理监听，并释放
 electron.remote.getCurrentWindow().removeAllListeners();
 
-// 定义加价标准金额
-const KEYPRICE = 500;
+// 定义默认加价标准金额
+const DEFAULTKEYPRICE = 100;
+
 // 创建数据库
 const db = new Datastore({filename: __dirname + '/data.db', autoload: true});
 db.loadDatabase(function(err) {
@@ -26,6 +27,7 @@ db.loadDatabase(function(err) {
 const importData = document.getElementById('importData');
 const exportData = document.getElementById('exportData');
 const search = document.getElementById('search');
+const settings = document.getElementById('settings');
 const help = document.getElementById('help');
 
 
@@ -96,6 +98,43 @@ ipc.on('selected-directory', function(err, path) {
     }
 });
 
+// 系统设置
+settings.addEventListener('click', function(event) {
+    let settings = JSON.parse(localStorage.getItem('settings')) || {priceArg: ''};
+    let html = `<form class="pure-form-aligned pure-form settings-box animated bounceIn">
+<div class="pure-control-group">
+            <label for="name">系数：</label>
+            <input id="priceArg" type="text" placeholder="请输入系数" value="${settings.priceArg}">
+        </div>
+<div class="pure-control-group">
+            <label for="name"></label>
+<span class="setting-tips"><i class="fa fa-info-circle" aria-hidden="true"></i>修改成交价每次增加或者减少多少价格</span>
+        </div>
+<div class="pure-controls">
+            <a id="submitSettings" class="pure-button pure-button-primary">保存</a><a id="cancelSettings" class="pure-button">回到首页</a>
+        </div>
+</form>`;
+    document.getElementById('contentData').innerHTML = html;
+
+    const priceArg = document.getElementById('priceArg');
+    const submitSettings = document.getElementById('submitSettings');
+    const cancelSettings = document.getElementById('cancelSettings');
+
+    cancelSettings.addEventListener('click', function(event) {
+	let items = JSON.parse(sessionStorage.getItem('items'));
+	createHtml(items[0]);
+    });
+
+    submitSettings.addEventListener('click', function(event) {
+	let setting = {
+	    priceArg: priceArg.value ? priceArg.value : DEFAULTKEYPRICE
+	};
+	localStorage.setItem('settings', JSON.stringify(setting));
+	alert('保存成功！');
+    });
+    
+});
+
 // 搜索功能
 search.addEventListener('click', function(event) {
     let html = `<form class="pure-form search-box animated bounceIn"><input type="text" placeholder="输入标的号" id="searchKey"><a class="pure-button pure-button-primary" id="searchGo">搜索</a><a class="pure-button" id="homeGo">取消</a></form>`;
@@ -142,14 +181,14 @@ help.addEventListener('click', function(event) {
    // mainWindow = new BrowserWindow({width: size.width, height: size.height});
 //});
 
-const createHtml = function(data) {
+const createHtml = function(data, index) {
     let emptyHtml = `<div class="empty-box"><i class="fa fa-file-excel-o fa-4" aria-hidden="true"></i>没有数据！请先导入:)</div>`;
     if(!data) {
 	document.getElementById('contentData').innerHTML = emptyHtml;
 	return false;
     }
 let html = `
-  <form id-data="${data._id}" class="pure-form pure-form-aligned pure-form-center animated fadeIn">
+  <form id-data="${data._id}" idIndex="${index}" class="pure-form pure-form-aligned pure-form-center animated fadeIn">
     <fieldset>
         <div class="pure-control-group">
           <label for="name">标的号：</label>
@@ -210,7 +249,7 @@ let html = `
     const idData = document.getElementsByTagName('form')[0].getAttribute('id-data');
     const donePrice = document.getElementById('donePrice');
     const defaultData = donePrice.getAttribute('default-data');
-
+    const _id = document.getElementsByTagName('form')[0].getAttribute('idIndex');
 
     saveData.addEventListener('click', function(event) {
 	ipc.send('save-tips');
@@ -219,7 +258,7 @@ let html = `
 		
 		db.update({_id: idData}, {$set: {chengjiaojia: parseInt(donePrice.value)}}, {}, function(err, numReplaed) {
 		    if(numReplaed) {
-			initFindData();
+			initFindData(_id);
 		    };
 		});
 	    }
@@ -239,7 +278,7 @@ let html = `
 			    createHtml(0);
 			} else {
 			    initFindData();
-			    createHtml(items[currentIndex]);
+			    createHtml(items[currentIndex], currentIndex);
 			}
 		    }
 		});
@@ -260,11 +299,10 @@ function nextCellForm(index) {
     let totalIndex = items.length;
 
     if(_index >= totalIndex) {
-	console.log('>>:' + _index);
 	currentIndex = 0;
 	_index = 0;
     }
-    createHtml(items[_index]);
+    createHtml(items[_index], _index);
 }
 
 function preCellForm(index) {
@@ -285,8 +323,7 @@ function preCellForm(index) {
 
     } 
 
-    console.log(_index);
-    createHtml(items[_index]);
+    createHtml(items[_index], _index);
 }
 
 Date.prototype.pattern=function(fmt) {         
@@ -324,7 +361,7 @@ Date.prototype.pattern=function(fmt) {
 };
      
 
-function initFindData() {
+function initFindData(index) {
     let date = new Date();      
     let formatDate = date.pattern("yyyy-MM-dd EEE HH:mm:ss");
     const currentDate = document.getElementById('currentDate');
@@ -333,7 +370,11 @@ ${formatDate}</span>`;
     currentDate.innerHTML = dataHtml;
     db.find({biaodihao: {$exists: true}}).sort({biaodihao: 1}).exec(function(err, docs) {
 	if(!err) {
-	    createHtml(docs[0]);
+	    if(index) {
+		createHtml(docs[index], index);
+	    } else {
+		createHtml(docs[0], 0);
+	    }
 	    sessionStorage.setItem('items', JSON.stringify(docs));
 	}
     });
@@ -353,19 +394,24 @@ function nextLeft() {
     currentIndex--;
     preCellForm(currentIndex);
 }
+
 function nextUp() {
+    let tempSettings = JSON.parse(localStorage.getItem('settings')) || {priceArg: DEFAULTKEYPRICE};
+    let KEYPRICE = tempSettings.priceArg;
     let donePrice = document.getElementById('donePrice');
-    donePrice.value = parseInt(donePrice.value) +  KEYPRICE;
+    donePrice.value = parseInt(donePrice.value) +  parseInt(KEYPRICE);
 }
 
 function nextDown() {
+    let tempSettings = JSON.parse(localStorage.getItem('settings')) || {priceArg: DEFAULTKEYPRICE};
+    let KEYPRICE = tempSettings.priceArg;
     let donePrice = document.getElementById('donePrice');
     if(parseInt(donePrice.value) < 100) {
 	donePrice.value = 0;
 	alert('最低价格，不能再减了');
 	return false;
     }
-    donePrice.value = parseInt(donePrice.value) - KEYPRICE;
+    donePrice.value = parseInt(donePrice.value) - parseInt(KEYPRICE);
 }
 
 ipc.on('right-page', function(event, message) {

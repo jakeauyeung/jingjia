@@ -83,7 +83,7 @@ const createWindow = function() {
 
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-   // mainWindow.webContents.openDevTools();
+//    mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
     });
@@ -104,13 +104,13 @@ const createWindow = function() {
 	
     }
     mainWindow.on('blur', function() {
-		let win = BrowserWindow.getFocusedWindow();
-		if(win) return;
-		globalShortcut.unregisterAll();
+	let win = BrowserWindow.getFocusedWindow();
+	if(win) return;
+	globalShortcut.unregisterAll();
     });
 
     mainWindow.on('focus', function() {
-		registerShortcut();
+	registerShortcut();
     });
 };
 
