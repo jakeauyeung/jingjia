@@ -1,15 +1,17 @@
 {
   "name": "jingjia",
   "version": "1.0.0",
-  "description": "",
+  "description": "a tool for jingjia",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"electron .\"",
     "packageDarwin": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
-    "packageWin": "electron-packager . 'jingjia' --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "packageWin32": "electron-packager . jingjia --platform=win32 --arch=ia32 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "packageWin64": "electron-packager . jingjia --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
     "packageLinux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
     "prepackage": "rm -rf build && rm -rf dist",
-    "package": "npm run packageDarwin && npm run packageWin && npm run packageLinux"
+    "package": "npm run packageDarwin && npm run packageWin32 && npm run packageWin64 && npm run packageLinux",
+    "win": "npm run packageWin32 && npm run packageWin64"
   },
   "repository": {
     "type": "git",
@@ -22,9 +24,9 @@
   },
   "homepage": "https://github.com/jakeauyeung/jingjia#readme",
   "devDependencies": {
+    "concurrently": "^3.1.0",
     "electron": "^1.4.8",
-    "electron-packager": "^8.3.0",
-    "gulp": "^3.9.1"
+    "electron-packager": "^8.3.0"
   },
   "dependencies": {
     "nedb": "^1.8.0",

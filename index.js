@@ -35,7 +35,7 @@ ipc.on('open-file-dialog', function(event) {
 // 提示用户保存
 ipc.on('save-tips', function(event) {
     dialog.showMessageBox({
-	type: 'question',
+	type: 'warning',
 	buttons: ['确认', '放弃'],
 	message: '确认会覆盖原来数据，请确认是否要保存？',
 	defaultId: 1,
@@ -47,7 +47,7 @@ ipc.on('save-tips', function(event) {
 // 提示用户删除后果
 ipc.on('del-tips', function(event) {
     dialog.showMessageBox({
-	type: 'question',
+	type: 'warning',
 	buttons: ['确认', '放弃'],
 	message: '删除数据就无法找回，请确认是否要删除？',
 	defaultId: 1,
@@ -59,7 +59,7 @@ ipc.on('del-tips', function(event) {
 // 提示用户导入的后果
 ipc.on('warning-import-tips', function(event) {
     dialog.showMessageBox({
-	type: 'question',
+	type: 'warning',
 	buttons: ['确认导入', '放弃'],
 	message: '导入会覆盖原来数据，请确认是否要导入？',
 	defaultId: 1,
@@ -72,16 +72,18 @@ ipc.on('warning-import-tips', function(event) {
 let mainWindow = null;
 
 const createWindow = function() {
+	let electronScreen = electron.screen;
+  	let size = electronScreen.getPrimaryDisplay().workAreaSize;
     let windowOptions = {
-	width: 800,
-	height: 600,
+	width: size.width,
+	height: size.height,
 	minWidth: 800,
 	title: app.getName()
     };
 
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-    mainWindow.webContents.openDevTools();
+   // mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
     });
@@ -102,13 +104,13 @@ const createWindow = function() {
 	
     }
     mainWindow.on('blur', function() {
-	let win = BrowserWindow.getFocusedWindow();
-	if(win) return;
-	globalShortcut.unregisterAll();
+		let win = BrowserWindow.getFocusedWindow();
+		if(win) return;
+		globalShortcut.unregisterAll();
     });
 
     mainWindow.on('focus', function() {
-	registerShortcut();
+		registerShortcut();
     });
 };
 
