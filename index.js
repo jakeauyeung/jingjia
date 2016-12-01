@@ -7,7 +7,6 @@ const dialog = require('electron').dialog;
 const globalShortcut = electron.globalShortcut;
 
 
-
 // 监听客户选择的目录
 ipc.on('open-directory-dialog', function(event) {
     dialog.showOpenDialog({
@@ -83,7 +82,7 @@ const createWindow = function() {
 
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-   // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
     });
@@ -110,6 +109,15 @@ const createWindow = function() {
     });
 
     mainWindow.on('focus', function() {
+	registerShortcut();
+    });
+    // 接受注销全局绑定键盘的操作
+    ipc.on('disable-global-key', function() {
+	globalShortcut.unregisterAll();
+    });
+
+    // 接受打开全局绑定键盘的操作
+    ipc.on('enable-global-key', function() {
 	registerShortcut();
     });
 };

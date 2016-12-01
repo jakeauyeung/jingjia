@@ -8,11 +8,11 @@ const remote = require('electron').remote;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
 const Datastore = require('nedb');
-//const globalShortcut = require('electron').remote.globalShortcut;
+const globalShortcut = require('electron').remote.globalShortcut;
 const fs = require('fs');
 
-// 处理监听，并释放
-electron.remote.getCurrentWindow().removeAllListeners();
+// 处理监听，并释放 会让主程监听失效
+//electron.remote.getCurrentWindow().removeAllListeners();
 
 // 定义默认加价标准金额
 const DEFAULTKEYPRICE = 100;
@@ -88,7 +88,7 @@ ipc.on('selected-directory', function(err, path) {
 		    let _temp = [docs[i].biaodihao, docs[i].zhonglei, docs[i].guige, docs[i].dengji, docs[i].yanse, docs[i].shuliang, docs[i].qipaijia, docs[i].chengjiaojia, docs[i].chengjiaohao];
 		    tempArray.push(_temp);
 		}
-		let _path = path[0] + '/export.xlsx';
+		let _path = path[0] + '/export.xls';
 		let buffer = xlsx.build([{name: "jingbiao", data: tempArray}]);
 		fs.writeFile(_path, buffer, function(err) {
 		    if (err) throw err;
@@ -138,6 +138,8 @@ settings.addEventListener('click', function(event) {
 
 // 搜索功能
 search.addEventListener('click', function(event) {
+    // 取消注册的全局快捷键
+    ipc.send('disable-global-key');
     let html = `<form class="pure-form search-box animated bounceIn"><input type="text" placeholder="输入标的号" id="searchKey"><a class="pure-button pure-button-primary" id="searchGo">搜索</a><a class="pure-button" id="homeGo">取消</a></form>`;
     document.getElementById('contentData').innerHTML = html;
 
@@ -145,6 +147,7 @@ search.addEventListener('click', function(event) {
     const searchGo = document.getElementById('searchGo');
 
     homeGo.addEventListener('click', function(event) {
+	ipc.send('enable-global-key');
 	let items = JSON.parse(sessionStorage.getItem('items'));
 	createHtml(items[0]);
     });
@@ -158,6 +161,7 @@ search.addEventListener('click', function(event) {
 
 	db.find({biaodihao: parseInt(searchKey)}, function(err, docs) {
 	    if(docs.length) { // 这里目前没考虑多条情况，前提标的号可重复
+		ipc.send('enable-global-key');
 		createHtml(docs[0]);
 	    } else {
 		alert("查找的标的不存在！");
