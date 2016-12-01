@@ -14,6 +14,7 @@ const fs = require('fs');
 // 处理监听，并释放 会让主程监听失效
 //electron.remote.getCurrentWindow().removeAllListeners();
 
+
 // 定义默认加价标准金额
 const DEFAULTKEYPRICE = 100;
 
@@ -174,7 +175,7 @@ search.addEventListener('click', function(event) {
     });
 });
 
-// help
+// 帮助
 help.addEventListener('click', function(event) {
     const modalPath = path.join('file://', __dirname, 'help.html');
     let win = new BrowserWindow({width:500, height: 400, frame: false });
@@ -182,12 +183,15 @@ help.addEventListener('click', function(event) {
     win.loadURL(modalPath);
     win.show();
 });
-// fullscreen
-//fullscreenFix.addEventListener('click', function(event) {
- //   let electronScreen = remote.screen;
-  //  let size = electronScreen.getPrimaryDisplay().workAreaSize;
-   // mainWindow = new BrowserWindow({width: size.width, height: size.height});
-//});
+// 全屏显示开关
+fullscreenFix.addEventListener('click', function(event) {
+	let win = remote.getCurrentWindow();
+	if(win.isFullScreen()) {
+		win.setFullScreen(false);
+	} else {
+		win.setFullScreen(true);
+	}
+});
 
 const createHtml = function(data, index) {
     let emptyHtml = `<div class="empty-box"><i class="fa fa-file-excel-o fa-4" aria-hidden="true"></i>没有数据！请先导入:)</div>`;

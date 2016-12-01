@@ -102,6 +102,7 @@ const createWindow = function() {
 	});
 	
     }
+
     mainWindow.on('blur', function() {
 	let win = BrowserWindow.getFocusedWindow();
 	if(win) return;
