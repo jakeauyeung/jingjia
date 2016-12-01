@@ -101,6 +101,7 @@ ipc.on('selected-directory', function(err, path) {
 
 // 系统设置
 settings.addEventListener('click', function(event) {
+    ipc.send('disable-global-key');
     let settings = JSON.parse(localStorage.getItem('settings')) || {priceArg: ''};
     let html = `<form class="pure-form-aligned pure-form settings-box animated bounceIn">
 <div class="pure-control-group">
@@ -122,11 +123,13 @@ settings.addEventListener('click', function(event) {
     const cancelSettings = document.getElementById('cancelSettings');
 
     cancelSettings.addEventListener('click', function(event) {
+	ipc.send('enable-global-key');
 	let items = JSON.parse(sessionStorage.getItem('items'));
 	createHtml(items[0]);
     });
 
     submitSettings.addEventListener('click', function(event) {
+	
 	let setting = {
 	    priceArg: priceArg.value ? priceArg.value : DEFAULTKEYPRICE
 	};
