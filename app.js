@@ -11,6 +11,7 @@ const Datastore = require('nedb');
 const globalShortcut = require('electron').remote.globalShortcut;
 const fs = require('fs');
 
+
 // 处理监听，并释放 会让主程监听失效
 //electron.remote.getCurrentWindow().removeAllListeners();
 
@@ -94,6 +95,7 @@ ipc.on('selected-directory', function(err, path) {
 		fs.writeFile(_path, buffer, function(err) {
 		    if (err) throw err;
 		    alert('导出成功，文件在：' + _path); //文件被保存
+		    shell.showItemInFolder(path[0]);
 		});
 	    }
 	});
