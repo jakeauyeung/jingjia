@@ -26,7 +26,7 @@ db.loadDatabase(function(err) {
 });
 
 // 页面所有按钮列表
-//const fullscreenFix = document.getElementById('fullscreenFix');
+const fullscreenFix = document.getElementById('fullscreenFix');
 const importData = document.getElementById('importData');
 const exportData = document.getElementById('exportData');
 const search = document.getElementById('search');
@@ -62,7 +62,8 @@ ipc.on('selected-files', function(event, path) {
 			shuliang: importData[i][5], // 数量
 			qipaijia: importData[i][6], // 起拍价
 			chengjiaojia: importData[i][7], // 成交价
-			chengjiaohao: importData[i][8] // 成交号
+			chengjiaohao: importData[i][8], // 成交号
+			chengjiaoren: importData[i][9] // 成交人
 		    };
 		    db.insert(doc, function(err, newDocs) {
 			if(err) alert('导入出现异常，错误：' + errr);
@@ -82,12 +83,12 @@ exportData.addEventListener('click', function(event) {
 ipc.on('selected-directory', function(err, path) {
     if(path) {
 	let tempArray = [];
-	let titleCol = ['标的号','种类','规格','等级','颜色','数量','起拍价','成交价','成交号'];
+	let titleCol = ['标的号','种类','规格','等级','颜色','数量','起拍价','成交价','成交号','成交人'];
 	tempArray.push(titleCol);
 	db.find({biaodihao: {$exists: true}}).sort({biaodihao: 1}).exec(function(err, docs) {
 	    if(!err) {
 		for(let i = 0, l = docs.length; i < l; i++ ) {
-		    let _temp = [docs[i].biaodihao, docs[i].zhonglei, docs[i].guige, docs[i].dengji, docs[i].yanse, docs[i].shuliang, docs[i].qipaijia, docs[i].chengjiaojia, docs[i].chengjiaohao];
+		    let _temp = [docs[i].biaodihao, docs[i].zhonglei, docs[i].guige, docs[i].dengji, docs[i].yanse, docs[i].shuliang, docs[i].qipaijia, docs[i].chengjiaojia, docs[i].chengjiaohao, docs[i].chengjiaoren];
 		    tempArray.push(_temp);
 		}
 		let _path = path[0] + '/export.xls';
@@ -201,104 +202,94 @@ const createHtml = function(data, index) {
 	document.getElementById('contentData').innerHTML = emptyHtml;
 	return false;
     }
-let html = `
-  <form id-data="${data._id}" idIndex="${index}" class="pure-form pure-form-aligned pure-form-center animated fadeIn">
-    <fieldset>
-        <div class="pure-control-group">
-          <label for="name">标的号：</label>
-	  <span>${data.biaodihao}</span>
-        </div>
 
-        <div class="pure-control-group">
-          <label for="foo">种类：</label>
-	  <span>${data.zhonglei}</span>
-	</div>
+    let html = `<div class="biaodi-content"><span class="chengjiaohao">成交号：${data.chengjiaohao}</span><table id-data="${data._id}" idIndex="${index}" class="pure-table pure-table-bordered pure-table-custom pure-form animated fadeIn">
+  <tbody>
+    <tr>
+      <td>标的号：</td>
+      <td class="font20">${data.biaodihao}号标的</td>
+      <td rowspan="3">成交人：</td>
+      <td rowspan="3"><input id="donePerson" type="text" default-data="${data.chengjiaoren}" value="${data.chengjiaoren}" placeholder="成交人"/></td>
+    </tr>
 
-	<div class="pure-control-group">
-          <label for="foo">规格：</label>
-	  <span>${data.guige}</span>
-	</div>
-	
-	 <div class="pure-control-group">
-          <label for="foo">等级：</label>
-	  <span>${data.dengji}</span>
-	 </div>
+    <tr>
+      <td>种类：</td>
+      <td class="font20">${data.zhonglei}</td>
+    </tr>
 
-	  <div class="pure-control-group">
-          <label for="foo">颜色：</label>
-	  <span>${data.yanse}</span>
-	 </div>
-
-	 <div class="pure-control-group">
-          <label for="foo">数量：</label>
-	  <span>${data.shuliang}只</span>
-	 </div>
-
-	  <div class="pure-control-group">
-          <label for="foo">起拍价：</label>
-	  <span>${data.qipaijia}元</span>
-	 </div>
-        
-	  <div class="pure-control-group">
-            <label for="foo">成交价：</label>
-	  <input id="donePrice" type="text" default-data="${data.chengjiaojia}" value="${data.chengjiaojia}" placeholder="成交价"/>
-	 </div>
-
-        <div class="pure-control-group">
-          <label for="password">成交号：</label>
-	  <span id="dealNo">${data.chengjiaohao}</span>
-        </div>        
-	  <div class="pure-controls">
-	    <a class="pure-button pure-button-primary" id="saveData">保存</a>
-	    <a class="pure-button" id="delData">删除</a>
-         </div>
-    </fieldset>
-  </form>
-`;
+    <tr>
+      <td>规格：</td>
+      <td class="font20">${data.guige}</td>
+    </tr>
+    <tr>
+      <td>等级：</td>
+      <td class="font20">${data.dengji}</td>
+      <td rowspan="4">成交价：</td>
+      <td rowspan="4"><input id="donePrice" type="text" default-data="${data.chengjiaojia}" value="${data.chengjiaojia}" placeholder="成交价"/></td>
+    </tr>
+    <tr>
+      <td>颜色：</td>
+      <td class="font20">${data.yanse}</td>
+    </tr>
+    <tr>
+      <td>数量：</td>
+      <td class="font20">${data.shuliang}</td>
+    </tr>
+    <tr>
+      <td>起拍价：</td>
+      <td class="font20">${data.qipaijia}</td>
+    </tr>
+  </tbody>
+</table></div>`;
 
     document.getElementById('contentData').innerHTML = html;
 
-    const saveData = document.getElementById('saveData');
-    const delData = document.getElementById('delData');
-    const idData = document.getElementsByTagName('form')[0].getAttribute('id-data');
-    const donePrice = document.getElementById('donePrice');
-    const defaultData = donePrice.getAttribute('default-data');
-    const _id = document.getElementsByTagName('form')[0].getAttribute('idIndex');
+    //  const idData = document.getElementsByTagName('table')[0].getAttribute('id-data');
+    //  const donePrice = document.getElementById('donePrice');
+    //  const defaultDataPrice = donePrice.getAttribute('default-data');
+    //  const _id = document.getElementsByTagName('table')[0].getAttribute('idIndex');
+    //  const donePerson = document.getElementById('donePerson');
+    //  const saveData = document.getElementById('saveData');
+    // const defaultDataPerson = donePerson.getAttribute('default-data');
 
-    saveData.addEventListener('click', function(event) {
-	ipc.send('save-tips');
-	ipc.on('save-back', function(event, response) {
-	    if(!response) {
+     // saveData.addEventListener('click', function(event) {
+     // 	ipc.send('save-tips');
+     // 	ipc.on('save-back', function(event, response) {
+     // 	    console.log(donePrice.value);
+     // 	    if(!response) {
 		
-		db.update({_id: idData}, {$set: {chengjiaojia: parseInt(donePrice.value)}}, {}, function(err, numReplaed) {
-		    if(numReplaed) {
-			initFindData(_id);
-		    };
-		});
-	    }
-	});
-    });
-    delData.addEventListener('click', function(event) {
-	ipc.send('del-tips');
-	ipc.on('del-back', function(event, response) {
-	    if(!response) {
+    //		db.update({_id: idData}, {$set: {chengjiaojia: parseInt(donePrice.value)}}, {}, function(err, numReplaed) {
+    //		    if(numReplaed) {
+//     			initFindData(_id);
+     //		    };
+     //		});
+     //	    }
+    // 	});
+  //   });
+
+
+//    saveData.click();
+    // delData.addEventListener('click', function(event) {
+    // 	ipc.send('del-tips');
+    // 	ipc.on('del-back', function(event, response) {
+    // 	    if(!response) {
 		
-		let items = JSON.parse(sessionStorage.getItem('items'));
-		db.remove({_id: idData}, {}, function(err, numRemoved) {
-		    if (numRemoved) {
+    // 		let items = JSON.parse(sessionStorage.getItem('items'));
+    // 		db.remove({_id: idData}, {}, function(err, numRemoved) {
+    // 		    if (numRemoved) {
 		
-			if(items.length <= 1) {
-			    alert('数据全部删除！');
-			    createHtml(0);
-			} else {
-			    initFindData();
-			    createHtml(items[currentIndex], currentIndex);
-			}
-		    }
-		});
-	    }
-	});
-    });
+    // 			if(items.length <= 1) {
+    // 			    alert('数据全部删除！');
+    // 			    createHtml(0);
+    // 			} else {
+    // 			    initFindData();
+    // 			    createHtml(items[currentIndex], currentIndex);
+    // 			}
+    // 		    }
+    // 		});
+    // 	    }
+    // 	});
+    // });
 };
 
 
@@ -401,14 +392,44 @@ initFindData();
 // 注册按键事件
 
 function nextRight() {
-	
+    const idData = document.getElementsByTagName('table')[0].getAttribute('id-data');
+    const donePrice = document.getElementById('donePrice');
+    const defaultDataPrice = donePrice.getAttribute('default-data');
+    const _id = document.getElementsByTagName('table')[0].getAttribute('idIndex');
+    const donePerson = document.getElementById('donePerson');
+    const saveData = document.getElementById('saveData');
+    const defaultDataPerson = donePerson.getAttribute('default-data');
+    if(donePrice.value != defaultDataPrice || donePerson.value != defaultDataPerson) {
+	db.update({_id: idData}, {$set: {chengjiaojia: parseInt(donePrice.value), chengjiaoren: donePerson.value}}, {}, function(err, numReplaed) {
+    	    if(numReplaed) {
+    		initFindData(currentIndex);
+     	    };
+     	});
+
+    }
     nextCellForm(currentIndex + 1);
     currentIndex++;
+  
 }
 function nextLeft() {
-	
+    const idData = document.getElementsByTagName('table')[0].getAttribute('id-data');
+    const donePrice = document.getElementById('donePrice');
+    const defaultDataPrice = donePrice.getAttribute('default-data');
+    const _id = document.getElementsByTagName('table')[0].getAttribute('idIndex');
+    const donePerson = document.getElementById('donePerson');
+    const saveData = document.getElementById('saveData');
+    const defaultDataPerson = donePerson.getAttribute('default-data');
+    if(donePrice.value != defaultDataPrice || donePerson.value != defaultDataPerson) {
+	db.update({_id: idData}, {$set: {chengjiaojia: parseInt(donePrice.value), chengjiaoren: donePerson.value}}, {}, function(err, numReplaed) {
+    	    if(numReplaed) {
+    		initFindData(currentIndex);
+     	    };
+     	});
+
+    }	
     preCellForm(currentIndex - 1);
     currentIndex--;
+  
 }
 
 function nextUp() {
@@ -422,7 +443,7 @@ function nextDown() {
     let tempSettings = JSON.parse(localStorage.getItem('settings')) || {priceArg: DEFAULTKEYPRICE};
     let KEYPRICE = tempSettings.priceArg;
     let donePrice = document.getElementById('donePrice');
-    if(parseInt(donePrice.value) < 100) {
+    if(parseInt(donePrice.value) < 1) {
 	donePrice.value = 0;
 	alert('最低价格，不能再减了');
 	return false;
