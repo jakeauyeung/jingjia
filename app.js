@@ -10,11 +10,33 @@ const path = require('path');
 const Datastore = require('nedb');
 const globalShortcut = require('electron').remote.globalShortcut;
 const fs = require('fs');
-
+const json2csv = require('json2csv');
 
 // 处理监听，并释放 会让主程监听失效
 //electron.remote.getCurrentWindow().removeAllListeners();
 
+var fields = ['car', 'price', 'color'];
+var myCars = [
+  {
+    "car": "Audi",
+    "price": 40000,
+    "color": "blue"
+  }, {
+    "car": "BMW",
+    "price": 35000,
+    "color": "black"
+  }, {
+    "car": "Porsche",
+    "price": 60000,
+    "color": "green"
+  }
+];
+var csv = json2csv({ data: myCars, fields: fields });
+ 
+fs.writeFile('file.csv', csv, function(err) {
+  if (err) throw err;
+  console.log('file saved');
+});
 
 // 定义默认加价标准金额
 const DEFAULTKEYPRICE = 100;
