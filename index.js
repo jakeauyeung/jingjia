@@ -81,8 +81,9 @@ const createWindow = function() {
     };
 
     mainWindow = new BrowserWindow(windowOptions);
+	mainWindow.setFullScreen(true);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function() {
 	mainWindow = null;
     });
