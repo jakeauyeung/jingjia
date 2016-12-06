@@ -3,7 +3,7 @@ const shell = require('electron').shell;
 const ipc = require('electron').ipcRenderer;
 const os = require('os');
 const xlsx = require('node-xlsx');
-//const xls = require('xlsjs');
+// const xls = require('xlsjs');
 const remote = require('electron').remote;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
@@ -11,32 +11,11 @@ const Datastore = require('nedb');
 const globalShortcut = require('electron').remote.globalShortcut;
 const fs = require('fs');
 const json2csv = require('json2csv');
+const iconv = require('iconv-lite');
 
 // 处理监听，并释放 会让主程监听失效
 //electron.remote.getCurrentWindow().removeAllListeners();
 
-var fields = ['car', 'price', 'color'];
-var myCars = [
-  {
-    "car": "Audi",
-    "price": 40000,
-    "color": "blue"
-  }, {
-    "car": "BMW",
-    "price": 35000,
-    "color": "black"
-  }, {
-    "car": "Porsche",
-    "price": 60000,
-    "color": "green"
-  }
-];
-var csv = json2csv({ data: myCars, fields: fields });
- 
-fs.writeFile('file.csv', csv, function(err) {
-  if (err) throw err;
-  console.log('file saved');
-});
 
 // 定义默认加价标准金额
 const DEFAULTKEYPRICE = 100;
@@ -106,16 +85,29 @@ ipc.on('selected-directory', function(err, path) {
     if(path) {
 	let tempArray = [];
 	let titleCol = ['标的号','种类','规格','等级','颜色','数量','起拍价','成交价','成交号','成交人'];
-	tempArray.push(titleCol);
+	// tempArray.push(titleCol);
 	db.find({biaodihao: {$exists: true}}).sort({biaodihao: 1}).exec(function(err, docs) {
 	    if(!err) {
 		for(let i = 0, l = docs.length; i < l; i++ ) {
-		    let _temp = [docs[i].biaodihao, docs[i].zhonglei, docs[i].guige, docs[i].dengji, docs[i].yanse, docs[i].shuliang, docs[i].qipaijia, docs[i].chengjiaojia, docs[i].chengjiaohao, docs[i].chengjiaoren];
+            let _temp = {
+                '标的号': docs[i].biaodihao,
+                '种类': docs[i].zhonglei,
+                '规格': docs[i].guige,
+                '等级': docs[i].dengji,
+                '颜色': docs[i].yanse,
+                '数量': docs[i].shuliang,
+                '起拍价': docs[i].qipaijia,
+                '成交价': docs[i].chengjiaojia,
+                '成交号': docs[i].chengjiaohao,
+                '成交人': docs[i].chengjiaoren
+            };
+		    // let _temp = [docs[i].biaodihao, docs[i].zhonglei, docs[i].guige, docs[i].dengji, docs[i].yanse, docs[i].shuliang, docs[i].qipaijia, docs[i].chengjiaojia, docs[i].chengjiaohao, docs[i].chengjiaoren];
 		    tempArray.push(_temp);
 		}
-		let _path = path[0] + '/export.xls';
-		let buffer = xlsx.build([{name: "jingbiao", data: tempArray}]);
-		fs.writeFile(_path, buffer, function(err) {
+		let _path = path[0] + '/export.csv';
+		// let buffer = xlsx.build([{name: "jingbiao", data: tempArray}]);
+        let csv = json2csv({data: tempArray, fields: titleCol});
+		fs.writeFile(_path, iconv.encode(csv, 'GBK'), function(err) {
 		    if (err) throw err;
 		    alert('导出成功，文件在：' + _path); //文件被保存
 		    shell.showItemInFolder(path[0]);
