@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"electron .\"",
-    "packageDarwin": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
-    "packageWin32": "electron-packager . jingjia --platform=win32 --arch=ia32 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
-    "packageWin64": "electron-packager . jingjia --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
-    "packageLinux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
-    "prepackage": "rm -rf build && rm -rf dist",
-    "package": "npm run packageDarwin && npm run packageWin32 && npm run packageWin64 && npm run packageLinux",
-    "win": "npm run packageWin32 && npm run packageWin64"
+    "mac": "electron-packager . 'jingjia' --platform=darwin --arch=x64 --icon=jingjia.icns --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "win32": "electron-packager . jingjia --platform=win32 --arch=ia32 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "win64": "electron-packager . jingjia --platform=win32 --arch=x64 --icon=jingjia.ico --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "linux": "electron-packager . 'jingjia' --platform=linux --arch=x64 --out=./dist --overwrite --app-version=1.0.0 --ignore=dev-settings --prune",
+    "clean": "rm -rf build && rm -rf dist",
+    "build": "npm run mac && npm run win32 && npm run win64 && npm run linux",
+    "win": "npm run win32 && npm run win64"
   },
   "repository": {
     "type": "git",
