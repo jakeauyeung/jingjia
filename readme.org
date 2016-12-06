@@ -9,8 +9,11 @@
 | overwrite | 覆盖模式打包                                                                                        |
 
 
-**** 压缩
-- UPX
-  - 最后生成的exe 文件达到80M 以上，可以用 UPX 工具压缩至30M 左右，便于分发。
-
-
+**** 命令
+ - npm run mac [fn:打包mac平台应用]
+ - npm run win32 [fn:打包window32平台应用]
+ - npm run win64 [fn:打包window64平台应用]
+ - npm run linux [fn:打包linux平台应用]
+ - npm run clean [fn:清除打包文件]
+ - npm run build [fn:打包全平台应用]
+ - npm run win [fn:打包window平台全应用]
